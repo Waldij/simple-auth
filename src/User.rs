@@ -37,7 +37,7 @@ impl UsersStorage
 {
     pub fn new() -> UsersStorage
     {
-        let mut users = Vec::new();
+        let users = Vec::new();
         UsersStorage {users}
     }
 
