@@ -8,20 +8,20 @@ use ansi_term::Colour::Blue;
 extern crate rpassword;
 use rpassword::read_password;
 
-use crate::user;
+use crate::storage_model;
 
 pub(crate) struct SimpleAuth
 {
     number_of_tries: i32,
     current_number_of_tries: i32,
     timeout: time::Duration,
-    users_storage: user::UsersStorage,
+    users_storage: storage_model::UsersStorage,
 }
 
 impl SimpleAuth 
 {
 
-    pub fn new(number_of_tries: i32, timeout: time::Duration, users_storage: user::UsersStorage) -> SimpleAuth
+    pub fn new(number_of_tries: i32, timeout: time::Duration, users_storage: storage_model::UsersStorage) -> SimpleAuth
     {
         if number_of_tries <= 0 { println!("Incorrect number of tries!") }
         let current_number_of_tries = 0;
@@ -45,7 +45,7 @@ impl SimpleAuth
         self.current_number_of_tries += 1;
         let login = self.get_auth_login();
         let password = self.get_auth_password();
-        let user_to_auth = user::User::new(login, password);
+        let user_to_auth = storage_model::User::new(login, password);
         if self.users_storage.auth(user_to_auth)
         {
             println!("{}", Green.paint("Success!"));
@@ -69,13 +69,12 @@ impl SimpleAuth
 
     fn reset_number_of_tries(&mut self){ self.current_number_of_tries = 0; }
 
-    fn set_up_user(&self) -> user::User
+    fn set_up_user(&self) -> storage_model::User
     {
         println!("{}", Blue.paint("+=========User=creation========+"));
         let login = self.get_auth_login();
         let password = self.get_auth_password();
-        let user = user::User::new(login, password);
-        println!("User was created!");
+        let user = storage_model::User::new(login, password);
         return user;
     }
 
