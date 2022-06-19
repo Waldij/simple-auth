@@ -1,4 +1,3 @@
-use std::f32::consts::E;
 use std::{fmt};
 
 use ansi_term::Colour::Green;
