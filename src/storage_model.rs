@@ -1,3 +1,4 @@
+use std::f32::consts::E;
 use std::{fmt};
 
 use ansi_term::Colour::Green;
@@ -8,13 +9,17 @@ pub(crate) struct User
 {
     login: String,
     password: String,
+    number_of_attempts: i32,
+    locked: bool,
 }
 
 impl User 
 {
     pub fn new(login: String, password: String) -> User 
     {
-        User { login, password }
+        let number_of_attempts = 0;
+        let locked = false;
+        User { login, password, number_of_attempts, locked}
     }
 }
 
@@ -45,9 +50,22 @@ impl UsersStorage
         UsersStorage {users}
     }
 
-    pub fn auth(&mut self, user: User) -> bool { return self.user_exists(user) }
+    pub fn auth(&mut self, user: User) -> bool { return self.try_to_authorize(user) }
+
+    fn try_to_authorize(&mut self, user: User) -> bool
+    {
+        if self.user_exists(user) { return true; }
+        else 
+        {
+            return false;
+        }
+    }
+
+    fn check_attempts_for_user(&mut self, user: User) {}
 
     fn user_exists(&mut self, user: User) -> bool { return self.users.contains(&user); }
+
+    fn get_user_from_storage(&mut self, user: User) {}
 
     fn login_exists(&mut self, user:User) -> bool
     {
